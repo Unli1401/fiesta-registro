@@ -122,29 +122,40 @@
       }
     }
 
-    async function registrarInvitado() {
-      const nombre = document.getElementById('nombre').value.trim();
-      const apellido = document.getElementById('apellido').value.trim();
-      const confirma = document.getElementById('confirma').value;
-      const mensaje = document.getElementById('mensaje').value.trim();
+   async function registrarInvitado() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const apellido = document.getElementById('apellido').value.trim();
+  const confirma = document.getElementById('confirma').value;
+  const mensaje = document.getElementById('mensaje').value.trim();
 
-      if (!nombre || !apellido || !confirma) {
-        alert("Por favor completa todos los campos obligatorios.");
-        return;
-      }
+  if (!nombre || !apellido || !confirma) {
+    alert("Por favor completa todos los campos obligatorios.");
+    return;
+  }
 
-      await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, apellido, confirma, mensaje })
-      });
+  try {
+    const res = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, apellido, confirma, mensaje })
+    });
 
-      document.getElementById('nombre').value = '';
-      document.getElementById('apellido').value = '';
-      document.getElementById('confirma').value = '';
-      document.getElementById('mensaje').value = '';
-      cargarInvitados();
-    }
+    if (!res.ok) throw new Error("Error al guardar. Código: " + res.status);
+
+    alert("✅ Registro exitoso");
+
+    document.getElementById('nombre').value = '';
+    document.getElementById('apellido').value = '';
+    document.getElementById('confirma').value = '';
+    document.getElementById('mensaje').value = '';
+
+    // cargarInvitados(); // Desactivado porque no se visualiza en el index
+  } catch (err) {
+    alert("❌ No se pudo registrar: " + err.message);
+    console.error(err);
+  }
+}
+
 
     /*async function cargarInvitados() {
       const res = await fetch(apiUrl);
