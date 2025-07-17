@@ -7,12 +7,20 @@ app.use(cors());
 app.use(express.json());
 
 // 👉 Reemplaza esta URI con tu propia URI de MongoDB Atlas
-mongoose.connect('mongodb+srv://Admin:Unli.9308@clusterfiesta.gc04zcj.mongodb.net/?retryWrites=true&w=majority&appName=ClusterFiesta', {
+
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/fiesta';
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+
+/*mongoose.connect('mongodb+srv://Admin:Unli.9308@clusterfiesta.gc04zcj.mongodb.net/?retryWrites=true&w=majority&appName=ClusterFiesta', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log('MongoDB conectado'))
   .catch(err => console.error('Error al conectar MongoDB:', err));
-
+*/
 const InvitadoSchema = new mongoose.Schema({
   nombre: String,
   apellido: String,
