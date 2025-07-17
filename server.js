@@ -8,8 +8,8 @@ app.use(express.json());
 
 // 👉 Reemplaza esta URI con tu propia URI de MongoDB Atlas
 
-//const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/fiesta';
-const mongoUri = 'mongodb+srv://Admin:Admin:Unli.9308@clusterfiesta.gc04zcj.mongodb.net/?retryWrites=true&w=majority&appName=ClusterFiesta';
+const mongoUri = process.env.Mongo_Uri || 'mongodb://localhost:27017/fiesta';
+//const mongoUri = 'mongodb+srv://Admin:Admin:Unli.9308@clusterfiesta.gc04zcj.mongodb.net/?retryWrites=true&w=majority&appName=ClusterFiesta';
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
