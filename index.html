@@ -8,7 +8,7 @@
     * {
       box-sizing: inherit;
     }
-    
+
     body {
       margin: 0;
       padding: 0;
@@ -77,12 +77,21 @@
       top: 10px;
     }
     textarea {
-      resize: vertical; /* o "none" si no quieres que se agrande */
+      resize: vertical;
       min-height: 60px;
     }
-    
     .imagen-izq { left: 10px; }
     .imagen-der { right: 10px; }
+
+    /* Estilo para mensajes */
+    #mensaje {
+      display: none;
+      padding: 10px;
+      margin: 10px auto;
+      border-radius: 5px;
+      max-width: 400px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -92,8 +101,8 @@
 
   <h1>Registro de Invitados 🎉</h1>
 
-  <div id="mensaje" style="display: none; padding: 10px; margin-bottom: 10px; border-radius: 5px;"></div>
-  
+  <div id="mensaje"></div>
+
   <div class="formulario">
     <input type="text" id="nombre" placeholder="Nombre" required />
     <input type="text" id="apellido" placeholder="Apellido" required />
@@ -102,7 +111,7 @@
       <option value="Sí">Sí</option>
       <option value="No">No</option>
     </select>
-    <textarea id="mensaje" placeholder="Mensaje (opcional)"></textarea>
+    <textarea id="mensajeTexto" placeholder="Mensaje (opcional)"></textarea>
     <button onclick="registrarInvitado()">Registrar</button>
   </div>
 
@@ -124,70 +133,64 @@
       }
     }
 
-   async function registrarInvitado() {
-  const nombre = document.getElementById('nombre').value.trim();
-  const apellido = document.getElementById('apellido').value.trim();
-  const confirma = document.getElementById('confirma').value;
-  const mensaje = document.getElementById('mensaje').value.trim();
+    function mostrarMensaje(texto, tipo = 'exito') {
+      const div = document.getElementById('mensaje');
+      div.textContent = texto;
+      div.style.display = 'block';
+      div.style.backgroundColor = tipo === 'error' ? '#f8d7da' : '#d4edda';
+      div.style.color = tipo === 'error' ? '#721c24' : '#155724';
+      div.style.border = tipo === 'error' ? '1px solid #f5c6cb' : '1px solid #c3e6cb';
+      setTimeout(() => {
+        div.style.display = 'none';
+      }, 4000);
+    }
 
-  if (!nombre || !apellido || !confirma) {
-    alert("Por favor completa todos los campos obligatorios.");
-    return;
-  }
+    async function registrarInvitado() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const apellido = document.getElementById('apellido').value.trim();
+      const confirma = document.getElementById('confirma').value;
+      const mensaje = document.getElementById('mensajeTexto').value.trim();
 
-  try {
-    const res = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, apellido, confirma, mensaje })
-    });
+      if (!nombre || !apellido || !confirma) {
+        mostrarMensaje("Por favor completa todos los campos obligatorios.", 'error');
+        return;
+      }
 
-    if (!res.ok) throw new Error("Error al guardar. Código: " + res.status);
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, apellido, confirma, mensaje })
+        });
 
-    alert("✅ Registro exitoso");
+        if (!res.ok) throw new Error("Error al guardar. Código: " + res.status);
 
-    document.getElementById('nombre').value = '';
-    document.getElementById('apellido').value = '';
-    document.getElementById('confirma').value = '';
-    document.getElementById('mensaje').value = '';
+        mostrarMensaje("✅ Registro exitoso");
 
-    // cargarInvitados(); // Desactivado porque no se visualiza en el index
-  } catch (err) {
-    alert("❌ No se pudo registrar: " + err.message);
-    console.error(err);
-  }
-}
-
-
-    /*async function cargarInvitados() {
-      const res = await fetch(apiUrl);
-      const datos = await res.json();
-      const cont = document.getElementById('invitados');
-      cont.innerHTML = '<h2>Invitados:</h2>' + datos.map(i => `
-        <div class="invitado">
-          <strong>${i.nombre} ${i.apellido}</strong><br/>
-          Asistencia: <em>${i.confirma}</em><br/>
-          ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em>` : ''}
-        </div>
-      `).join('');
-    }*/
+        document.getElementById('nombre').value = '';
+        document.getElementById('apellido').value = '';
+        document.getElementById('confirma').value = '';
+        document.getElementById('mensajeTexto').value = '';
+      } catch (err) {
+        console.error(err);
+        mostrarMensaje("❌ No se pudo registrar: " + err.message, 'error');
+      }
+    }
 
     crearGlobos();
-    //cargarInvitados();
   </script>
+
   <!-- Botón invisible en la esquina inferior derecha -->
-<div onclick="window.location.href='invitados.html'" style="
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  opacity: 0;
-  z-index: 9999;
-  cursor: pointer;
-">
-</div>
+  <div onclick="window.location.href='invitados.html'" style="
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    z-index: 9999;
+    cursor: pointer;
+  "></div>
 
 </body>
 </html>
-
