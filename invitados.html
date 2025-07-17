@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lista de Invitados</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f8ff;
+      padding: 20px;
+      text-align: center;
+    }
+    .invitado {
+      background: #e0f7fa;
+      margin: 10px auto;
+      max-width: 500px;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Invitados 🎊</h1>
+  <div id="invitados">Cargando...</div>
+
+  <script>
+    const apiUrl = 'https://fiesta-api-v065.onrender.com/api/invitados';
+
+    async function cargarInvitados() {
+      try {
+        const res = await fetch(apiUrl);
+        const datos = await res.json();
+
+        const cont = document.getElementById('invitados');
+        if (!datos.length) {
+          cont.innerHTML = "<p>No hay invitados registrados aún.</p>";
+          return;
+        }
+
+        cont.innerHTML = datos.map(i => `
+          <div class="invitado">
+            <strong>${i.nombre} ${i.apellido}</strong><br/>
+            Asistencia: <em>${i.confirma}</em><br/>
+            ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em>` : ''}
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById('invitados').innerHTML = "Error al cargar invitados.";
+        console.error(err);
+      }
+    }
+
+    cargarInvitados();
+  </script>
+</body>
+</html>
