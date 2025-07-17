@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Fiesta</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #d1f0ff, #fff);
+      font-family: sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .formulario {
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #999;
+    }
+    input, select, textarea, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+    }
+    #invitados {
+      margin-top: 30px;
+    }
+    .invitado {
+      background: #e0f7fa;
+      margin: 10px auto;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .globos {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .globo {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background: red;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: flotar 10s linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes flotar {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-100px); }
+    }
+    .imagen-izq, .imagen-der {
+      width: 100px;
+      position: fixed;
+      top: 10px;
+    }
+    .imagen-izq { left: 10px; }
+    .imagen-der { right: 10px; }
+  </style>
+</head>
+<body>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Emblema_de_un_colegio.svg/512px-Emblema_de_un_colegio.svg.png" class="imagen-izq" alt="Colegio"/>
+  <img src="https://cdn.pixabay.com/photo/2016/11/29/09/08/food-1869598_960_720.jpg" class="imagen-der" alt="Discada"/>
+
+  <h1>Registro de Invitados 🎉</h1>
+
+  <div class="formulario">
+    <input type="text" id="nombre" placeholder="Nombre" required />
+    <input type="text" id="apellido" placeholder="Apellido" required />
+    <select id="confirma">
+      <option value="" disabled selected>¿Confirmas asistencia?</option>
+      <option value="Sí">Sí</option>
+      <option value="No">No</option>
+    </select>
+    <textarea id="mensaje" placeholder="Mensaje (opcional)"></textarea>
+    <button onclick="registrarInvitado()">Registrar</button>
+  </div>
+
+  <div id="invitados"></div>
+  <div class="globos"></div>
+
+  <script>
+    const apiUrl = 'http://localhost:3000/api/invitados';
+
+    function crearGlobos(n = 15) {
+      const contenedor = document.querySelector('.globos');
+      for (let i = 0; i < n; i++) {
+        const globo = document.createElement('div');
+        globo.className = 'globo';
+        globo.style.left = `${Math.random() * 100}vw`;
+        globo.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        globo.style.animationDuration = `${5 + Math.random() * 10}s`;
+        contenedor.appendChild(globo);
+      }
+    }
+
+    async function registrarInvitado() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const apellido = document.getElementById('apellido').value.trim();
+      const confirma = document.getElementById('confirma').value;
+      const mensaje = document.getElementById('mensaje').value.trim();
+
+      if (!nombre || !apellido || !confirma) {
+        alert("Por favor completa todos los campos obligatorios.");
+        return;
+      }
+
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, apellido, confirma, mensaje })
+      });
+
+      document.getElementById('nombre').value = '';
+      document.getElementById('apellido').value = '';
+      document.getElementById('confirma').value = '';
+      document.getElementById('mensaje').value = '';
+      cargarInvitados();
+    }
+
+    async function cargarInvitados() {
+      const res = await fetch(apiUrl);
+      const datos = await res.json();
+      const cont = document.getElementById('invitados');
+      cont.innerHTML = '<h2>Invitados:</h2>' + datos.map(i => `
+        <div class="invitado">
+          <strong>${i.nombre} ${i.apellido}</strong><br/>
+          Asistencia: <em>${i.confirma}</em><br/>
+          ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em>` : ''}
+        </div>
+      `).join('');
+    }
+
+    crearGlobos();
+    cargarInvitados();
+  </script>
+</body>
+</html>
+
