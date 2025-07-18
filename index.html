@@ -92,6 +92,12 @@
       max-width: 400px;
       font-weight: bold;
     }
+
+    p {
+      margin: 10px 0;
+      font-size: 1.2em;
+      font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    }
   </style>
 </head>
 <body>
@@ -106,7 +112,39 @@
         Ver ubicación en Google Maps
   </a>
   -->
-  <p>¡Bienvenido a la fiesta! Por favor, completa el formulario para confirmar tu asistencia.</p>
+  <style>
+  @keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .parpadea {
+    animation: parpadeo 1.2s infinite;
+  }
+</style>
+
+<div style="
+  background: #ffffffcc;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.6;
+">
+  <p style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">
+    🎉 Te invito a mi cumpleaños 🎉
+  </p>
+  <p style="font-size: 18px;">
+    A celebrarse el <span class="parpadea"><strong>9 de Agosto</strong> a partir de las <strong>14 horas</strong></span>
+  </p>
+</div>
+
+  <p style="font-size: 18px; font-weight: bold;">
+    ¡Confirma tu asistencia y deja un mensaje!  
 
   <div id="mensaje"></div>
 
@@ -118,7 +156,7 @@
       <option value="Sí">Sí</option>
       <option value="No">No</option>
     </select>
-    <textarea id="mensajeTexto" placeholder="Mensaje (opcional)"></textarea>
+    <textarea id="mensajeTexto" placeholder="Mensaje"></textarea>
     <button onclick="registrarInvitado()">Registrar</button>
   </div>
 
@@ -199,11 +237,73 @@
   cursor: pointer;
 "></div>
 
-<!-- Reproductor de audio automático y oculto -->
+<!-- Reproductor de audio automático y oculto 
 <audio autoplay hidden>
   <source src="https://personal.technoservices.cl/cancion.mp3" type="audio/mpeg">
   Tu navegador no soporta el audio.
 </audio>
+-->
+
+<!--
+<audio id="musica" controls>
+  <source src="https://personal.technoservices.cl/cancion.mp3" type="audio/mpeg">
+  Tu navegador no soporta el audio.
+</audio>
+<script>
+  document.getElementById("musica").play().catch(err => {
+    console.log("No se pudo reproducir automáticamente:", err);
+  });
+</script>
+-->
+
+
+<!-- Audio oculto -->
+<audio id="musica" hidden>
+  <source src="https://personal.technoservices.cl/cancion.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio.
+</audio>
+
+<!-- Botón de música -->
+<div id="control-musica" style="
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 9999;
+  user-select: none;
+">🎵</div>
+
+<script>
+  const audio = document.getElementById('musica');
+  const control = document.getElementById('control-musica');
+
+  // Reproducción automática al primer clic o toque
+  const intentarReproducir = () => {
+    if (audio.paused) {
+      audio.play().then(() => {
+        control.textContent = '🎵';
+      }).catch(err => {
+        console.log("Reproducción bloqueada:", err);
+      });
+    }
+  };
+
+  document.addEventListener('click', intentarReproducir, { once: true });
+  document.addEventListener('touchstart', intentarReproducir, { once: true });
+
+  // Control manual
+  control.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      control.textContent = '🎵';
+    } else {
+      audio.pause();
+      control.textContent = '🔇';
+    }
+  });
+</script>
+
 
 <!-- Mapa embebido de Google Maps -->
 <h2 style="margin-top: 40px;">Ubicación de la Fiesta 🎉</h2>
