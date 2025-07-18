@@ -101,6 +101,13 @@
 
   <h1>Registro de Invitados 🎉</h1>
 
+  <!-- 
+  <a href="https://www.google.com/maps?q=Calle+Michay+2201,+La+Florida,+Santiago" target="_blank" style="display:inline-block; padding:10px 20px; background:#007bff; color:white; border-radius:8px; text-decoration:none; font-weight:bold;">
+        Ver ubicación en Google Maps
+  </a>
+  -->
+  <p>¡Bienvenido a la fiesta! Por favor, completa el formulario para confirmar tu asistencia.</p>
+
   <div id="mensaje"></div>
 
   <div class="formulario">
@@ -191,6 +198,24 @@
   z-index: 9999;
   cursor: pointer;
 "></div>
+
+<!-- Reproductor de audio automático y oculto -->
+<audio autoplay hidden>
+  <source src="https://personal.technoservices.cl/cancion.mp3" type="audio/mpeg">
+  Tu navegador no soporta el audio.
+</audio>
+
+<!-- Mapa embebido de Google Maps -->
+<h2 style="margin-top: 40px;">Ubicación de la Fiesta 🎉</h2>
+<iframe
+  src="https://www.google.com/maps?q=Calle+Michay+2201,+La+Florida,+Santiago&output=embed"
+  width="70%"
+  height="300"
+  style="border:0; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); margin-top:10px;"
+  allowfullscreen=""
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
 
 
 </body>
