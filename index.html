@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de Fiesta</title>
+  <title>Registro de Invitados</title>
   <style>
     * {
       box-sizing: inherit;
@@ -113,14 +113,40 @@
     .fa-envelope {
       margin-right: 5px; /* Espacio entre el icono y el texto */
     }
+
+    .marca-agua {
+  position: fixed;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.marca-agua img {
+  width: 400px;
+  max-width: 80vw;
+  height: auto;
+}
+
+/* Ajuste para pantallas grandes */
+  @media screen and (min-width: 768px) {
+
+  .marca-agua {
+    top: 60%; /* más centrado en pantallas grandes */
+  }
+}
+
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<!--
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Emblema_de_un_colegio.svg/512px-Emblema_de_un_colegio.svg.png" class="imagen-izq" alt="Colegio"/>
-  <img src="https://cdn.pixabay.com/photo/2016/11/29/09/08/food-1869598_960_720.jpg" class="imagen-der" alt="Discada"/>
--->
+<!-- Imagen como fondo marca de agua -->
+<div class="marca-agua">
+  <img src="./img/cumchester.png" alt="Marca de agua" style="width: 400px; max-width: 80vw; height: auto;">
+</div>
+
   <h1>Registro de Invitados 🎉</h1>
 
   <!-- 
