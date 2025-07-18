@@ -99,7 +99,22 @@
       font-size: 1.2em;
       font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
     }
+
+    .footer-bottom a {
+      color: inherit; /* Hereda el color del texto del padre */
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .footer-bottom a:hover {
+      opacity: 0.8;
+    }
+
+    .fa-envelope {
+      margin-right: 5px; /* Espacio entre el icono y el texto */
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <!--
@@ -328,7 +343,13 @@
 
 <footer class="footer">
   <div class="footer-bottom">
-    <p>Desarrollado por Esteban Corrales &copy; 2025</p>
+    <p>
+      Desarrollado por 
+      <a href="mailto:unlimited1401@gmail.com" style="color: inherit; text-decoration: none;">
+        <i class="fas fa-envelope"></i> Esteban Corrales
+      </a> 
+      &copy; 2025
+    </p>
   </div>
 </footer>
 </body>
