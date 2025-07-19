@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registro de Invitados</title>
-  <style>
+<style>
     * {
       box-sizing: inherit;
     }
@@ -22,23 +22,77 @@
     h1 {
       margin-top: 20px;
     }
+    
+    /* FORMULARIO CON FONDO DE IMAGEN */
     .formulario {
       margin: 20px auto;
       padding: 20px;
-      background: white;
+      background: url('./img/cumchester.png') center/cover no-repeat;
       width: 90%;
       max-width: 400px;
       border-radius: 10px;
       box-shadow: 0 0 10px #999;
+      position: relative;
+      overflow: hidden;
     }
+    
+    /* Capa semitransparente para mejor legibilidad */
+    .formulario::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.2); /* Ajusta transparencia aquí */
+      z-index: 0;
+    }
+    
+    /* Campos del formulario transparentes */
     input, select, textarea, button {
       display: block;
       width: 100%;
       margin: 10px 0;
       padding: 10px;
       font-size: 1em;
-      
+      background: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1; /* Para que aparezcan sobre el fondo */
     }
+    
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    
+    button {
+      background: rgba(0, 123, 255, 0.9); /* Azul semitransparente */
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Elementos que ya no son necesarios (comentados) */
+    /*
+    .marca-agua {
+      position: fixed;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.30;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .marca-agua img {
+      width: 400px;
+      max-width: 80vw;
+      height: auto;
+    }
+    */
+
+    /* Resto de estilos se mantienen igual */
     #invitados {
       margin-top: 30px;
     }
@@ -72,19 +126,6 @@
       0% { transform: translateY(100vh); }
       100% { transform: translateY(-100px); }
     }
-    .imagen-izq, .imagen-der {
-      width: 100px;
-      position: fixed;
-      top: 10px;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-    .imagen-izq { left: 10px; }
-    .imagen-der { right: 10px; }
-
-    /* Estilo para mensajes */
     #mensaje {
       display: none;
       padding: 10px;
@@ -93,60 +134,31 @@
       max-width: 400px;
       font-weight: bold;
     }
-
     p {
       margin: 10px 0;
       font-size: 1.2em;
       font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
     }
-
     .footer-bottom a {
-      color: inherit; /* Hereda el color del texto del padre */
+      color: inherit;
       text-decoration: none;
       transition: opacity 0.3s;
     }
-
     .footer-bottom a:hover {
       opacity: 0.8;
     }
-
     .fa-envelope {
-      margin-right: 5px; /* Espacio entre el icono y el texto */
+      margin-right: 5px;
     }
-
-    .marca-agua {
-      position: fixed;
-      top: 70%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0.30;
-      z-index: 0;
-      pointer-events: none;
-}
-
-.marca-agua img {
-  width: 400px;
-  max-width: 80vw;
-  height: auto;
-}
-
-/* Ajuste para pantallas grandes */
-  @media screen and (min-width: 768px) {
-
-  .marca-agua {
-    top: 60%; /* más centrado en pantallas grandes */
-  }
-}
-
-  </style>
+</style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <!-- Imagen como fondo marca de agua -->
-<div class="marca-agua">
+<!-- <div class="marca-agua">
   <img src="./img/cumchester.png" alt="Marca de agua" style="width: 400px; max-width: 80vw; height: auto;">
 </div>
-
+-->
   <h1>Registro de Invitados 🎉</h1>
 
   <!-- 
