@@ -21,6 +21,7 @@
       border-radius: 5px;
       box-shadow: 0 0 5px #aaa;
       text-align: left;
+      position: relative;
     }
     .header-image {
       max-width: 60%;
@@ -59,16 +60,32 @@
     .contador-item {
       margin: 5px 10px;
     }
+    .btn-eliminar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .registro-hora {
+      font-size: 0.8em;
+      color: #555;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
   <button id="volver" onclick="window.location.href='index.html'">← Volver al formulario</button>
-  
+
   <img class="header-image" src="./img/cumchester.png" alt="Imagen de la fiesta" />
 
   <h1>Lista de Invitados 🎊</h1>
-  
-  <!-- Contador de invitados -->
+
   <div id="contador" class="contador" style="display: none;">
     <div class="contador-item">
       <strong>Total:</strong> <span id="total-invitados">0</span>
@@ -80,7 +97,7 @@
       <strong>No confirmados:</strong> <span id="no-confirmados">0</span>
     </div>
   </div>
-  
+
   <div id="invitados">Cargando...</div>
 
   <script>
@@ -93,35 +110,54 @@
 
         const cont = document.getElementById('invitados');
         const contador = document.getElementById('contador');
-        
+
         if (!datos.length) {
           cont.innerHTML = "<p>No hay invitados registrados aún.</p>";
           return;
         }
 
-        // Mostrar contador
         contador.style.display = 'flex';
-        
-        // Contar invitados
+
         const total = datos.length;
         const confirmados = datos.filter(i => i.confirma === 'Sí').length;
         const noConfirmados = total - confirmados;
-        
-        // Actualizar contador
+
         document.getElementById('total-invitados').textContent = total;
         document.getElementById('confirmados').textContent = confirmados;
         document.getElementById('no-confirmados').textContent = noConfirmados;
 
-        // Mostrar lista de invitados
-        cont.innerHTML = datos.map(i => `
-          <div class="invitado">
-            <strong>${i.nombre} ${i.apellido}</strong><br/>
-            Asistencia: <em>${i.confirma}</em><br/>
-            ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em>` : ''}
-          </div>
-        `).join('');
+        cont.innerHTML = datos.map(i => {
+          const fechaHora = i.fecha 
+            ? new Date(i.fecha).toLocaleString('es-CL', { dateStyle: 'long', timeStyle: 'short' })
+            : 'Sin fecha';
+          return `
+            <div class="invitado" id="invitado-${i._id}">
+              <strong>${i.nombre} ${i.apellido}</strong><br/>
+              Asistencia: <em>${i.confirma}</em><br/>
+              ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em><br/>` : ''}
+              <div class="registro-hora">Registrado: ${fechaHora}</div>
+              <button class="btn-eliminar" onclick="eliminarInvitado('${i._id}')">Eliminar</button>
+            </div>
+          `;
+        }).join('');
       } catch (err) {
         document.getElementById('invitados').innerHTML = "Error al cargar invitados.";
+        console.error(err);
+      }
+    }
+
+    async function eliminarInvitado(id) {
+      if (!confirm("¿Eliminar este invitado?")) return;
+      try {
+        const res = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          document.getElementById(`invitado-${id}`).remove();
+          cargarInvitados(); // Recargar contadores
+        } else {
+          alert("Error al eliminar.");
+        }
+      } catch (err) {
+        alert("Error de red al eliminar.");
         console.error(err);
       }
     }

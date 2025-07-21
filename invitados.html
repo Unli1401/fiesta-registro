@@ -112,6 +112,37 @@
         document.getElementById('confirmados').textContent = confirmados;
         document.getElementById('no-confirmados').textContent = noConfirmados;
 
+        cont.innerHTML = datos.map(i => {
+                  const fechaHora = i.fecha 
+                    ? new Date(i.fecha).toLocaleString('es-CL', { dateStyle: 'long', timeStyle: 'short' })
+                    : 'Sin fecha';
+                  return `
+                    <div class="invitado" id="invitado-${i._id}">
+                      <strong>${i.nombre} ${i.apellido}</strong><br/>
+                      Asistencia: <em>${i.confirma}</em><br/>
+                      ${i.mensaje ? `<em>Mensaje: ${i.mensaje}</em><br/>` : ''}
+                      <div class="registro-hora">Registrado: ${fechaHora}</div>
+                      <!--<button class="btn-eliminar" onclick="eliminarInvitado('${i._id}')">Eliminar</button>-->
+                    </div>
+                  `;
+                }).join('');
+              } catch (err) {
+                document.getElementById('invitados').innerHTML = "Error al cargar invitados.";
+                console.error(err);
+              }
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         // Mostrar lista de invitados
         cont.innerHTML = datos.map(i => `
           <div class="invitado">
@@ -123,7 +154,7 @@
       } catch (err) {
         document.getElementById('invitados').innerHTML = "Error al cargar invitados.";
         console.error(err);
-      }
+      }*/
     }
 
     cargarInvitados();
